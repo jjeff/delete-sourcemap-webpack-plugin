@@ -11,9 +11,12 @@ class DeleteSourceMapWebpackPlugin {
         .forEach((key) => {
           countMatchAssets += 1;
           let asset = compilation.assets[key];
-          let source = asset.source().replace(/# sourceMappingURL=(.*\.map)/g, '# $1');
+          const source = asset.source()
+          const sourceStr = source.toString()
+          const updatedString = sourceStr.replace(/# sourceMappingURL=(.*\.map)/g, '# $1')
+          const updatedSource = updatedString.toString('binary')
           compilation.assets[key] = Object.assign(asset, {
-            source: function () { return source }
+            source: function () { return updatedSource }
           });
         });
         cb()
